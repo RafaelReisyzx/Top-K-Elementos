@@ -120,3 +120,66 @@ void freeHashTable(HashTable* hash_table) {
         }
     }
 }
+Heap* createHeap(int capacity) {
+    Heap* heap = (Heap*)malloc(sizeof(Heap));
+    if (heap != NULL) {
+        heap->capacity = capacity;
+        heap->size = 0;
+        heap->array = (HeapNode*)malloc(capacity * sizeof(HeapNode));
+    }
+    return heap;
+}
+
+void insertIntoHeap(Heap* heap, Word* word_node) {
+    if (heap->size < heap->capacity) {
+        HeapNode newNode;
+        newNode.word_node = word_node;
+        heap->array[heap->size] = newNode;
+        int index = heap->size;
+        heap->size++;
+        while (index != 0 && heap->array[(index - 1) / 2].word_node->frequency > word_node->frequency) {
+            heap->array[index] = heap->array[(index - 1) / 2];
+            index = (index - 1) / 2;
+        }
+        heap->array[index].word_node = word_node;
+    }
+}
+
+void heapify(Heap* heap, int index) {
+    int smallest = index;
+    int left = 2 * index + 1;
+    int right = 2 * index + 2;
+
+    if (left < heap->size && heap->array[left].word_node->frequency < heap->array[smallest].word_node->frequency) {
+        smallest = left;
+    }
+
+    if (right < heap->size && heap->array[right].word_node->frequency < heap->array[smallest].word_node->frequency) {
+        smallest = right;
+    }
+
+    if (smallest != index) {
+        HeapNode temp = heap->array[index];
+        heap->array[index] = heap->array[smallest];
+        heap->array[smallest] = temp;
+        heapify(heap, smallest);
+    }
+}
+
+Word* extractMinFromHeap(Heap* heap) {
+    if (heap->size == 0) {
+        return NULL;
+    }
+
+    Word* min_word = heap->array[0].word_node;
+    heap->array[0] = heap->array[heap->size - 1];
+    heap->size--;
+    heapify(heap, 0);
+
+    return min_word;
+}
+
+void freeHeap(Heap* heap) {
+    free(heap->array);
+    free(heap);
+}
