@@ -40,10 +40,10 @@ void loadStopWords(HashTable* hash_table, const char* stop_words_file) {
 
     char word[MAX_WORD_LENGTH];
     while (fgets(word, MAX_WORD_LENGTH, file)) {
-        word[strcspn(word, "\r\n")] = '\0';  // Remover quebras de linha
+        word[strcspn(word, "\r\n")] = '\0'; 
         unsigned long hash = hashFunction(word);
         Word* new_word = createWordNode(word);
-        new_word->frequency = -1;  // Marcar como palavra proibida
+        new_word->frequency = -1; 
         new_word->next = hash_table->table[hash];
         hash_table->table[hash] = new_word;
     }
@@ -60,9 +60,9 @@ void processFile(HashTable* hash_table, const char* input_file) {
 
     char word[MAX_WORD_LENGTH];
     while (fscanf(file, "%s", word) != EOF) {
-        word[strcspn(word, ".,!?")] = '\0';  // Remover pontuações
+        word[strcspn(word, ".,!?")] = '\0'; 
         for (int i = 0; word[i]; i++) {
-            word[i] = tolower(word[i]);  // Converter para minúsculas
+            word[i] = tolower(word[i]); 
         }
 
         if (strlen(word) > 0) {
