@@ -13,15 +13,15 @@ funções declaradas no arquivo Labirinto.h. Já o arquivo main.c é responsáve
 # Discussão
 
 # Funções 
-Heap* createHeap(int capacity);
-void insertIntoHeap(Heap* heap, Word* word_node);
-void heapify(Heap* heap, int index);
-Word* extractMinFromHeap(Heap* heap);
-void freeHeap(Heap* heap);
-void initializeHashTable(HashTable* hash_table);
-void loadStopWords(HashTable* hash_table, const char* stop_words_file);
-void processFile(HashTable* hash_table, const char* input_file);
-void freeHashTable(HashTable* hash_table);
+Heap* createHeap(int capacity)
+void insertIntoHeap(Heap* heap, Word* word_node)
+void heapify(Heap* heap, int index)
+Word* extractMinFromHeap(Heap* heap)
+void freeHeap(Heap* heap)
+void initializeHashTable(HashTable* hash_table)
+void loadStopWords(HashTable* hash_table, const char* stop_words_file)
+void processFile(HashTable* hash_table, const char* input_file)
+void freeHashTable(HashTable* hash_table)
 
 # Funcionamento
 
