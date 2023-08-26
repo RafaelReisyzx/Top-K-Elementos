@@ -1,6 +1,6 @@
 
 # Descrição do algoritmo
-A análise de texto é uma tarefa fundamental em muitos campos, como processamento de linguagem natural, mineração de dados e aprendizado de máquina. Um dos desafios frequentes é identificar as palavras mais relevantes e significativas em um documento, o que pode ser vital para extrair insights e compreender seu conteúdo. O algoritmo projetado busca abordar esse desafio de forma eficiente, permitindo a identificação das K palavras mais frequentes em um texto de maneira rápida e escalável, incluindo tabelas de hash e heaps, para alcançar esse objetivo.
+   A análise de texto é uma tarefa fundamental em muitos campos, como processamento de linguagem natural, mineração de dados e aprendizado de máquina. Um dos desafios frequentes é identificar as palavras mais relevantes e significativas em um documento, o que pode ser vital para extrair insights e compreender seu conteúdo. O algoritmo projetado busca abordar esse desafio de forma eficiente, permitindo a identificação das K palavras mais frequentes em um texto de maneira rápida e escalável, incluindo tabelas de hash e heaps, para alcançar esse objetivo.
 O problema central que o algoritmo aborda é como extrair informações úteis de grandes volumes de texto, destacando as palavras que mais contribuem para o significado do documento. Isso é especialmente importante em análises de sentimentos, resumos automáticos e análise de tendências, entre outras aplicações. O algoritmo resolve esse problema combinando a velocidade da busca em tabelas de hash com a capacidade de manter e manipular um heap, que classifica palavras com base em sua frequência.
 Ao utilizar uma tabela de hash para armazenar as palavras e suas frequências, o algoritmo otimiza a busca de palavras específicas, tornando-a quase instantânea. Além disso, o uso de um heap min garante que as K palavras mais frequentes sejam mantidas em ordem, permitindo a fácil identificação das palavras de maior relevância. Ao combinar essas estruturas de dados, o algoritmo aproveita a velocidade da tabela de hash e a funcionalidade de classificação do heap, resultando em um método eficiente para encontrar as palavras mais frequentes.
 
@@ -28,20 +28,19 @@ e k o número de itens mais relevantes.
 
 # Funções 
 
-- initializeHashTable(HashTable* hash_table)
+1. initializeHashTable(HashTable* hash_table)
 Essa função é responsável por inicializar a tabela de hash. Ela percorre a matriz table dentro da estrutura hash_table e define todos os ponteiros de cada posição da tabela como NULL. Isso prepara a tabela de hash para armazenar as palavras e suas frequências.
 
-- loadStopWords(HashTable* hash_table, const char* stop_words_file)
+2. loadStopWords(HashTable* hash_table, const char* stop_words_file)
 A função loadStopWords lida com as palavras que geralmente não carregam significado relevante em análises de texto, chamadas de "stop words". Ela lê um arquivo de stop words e, para cada palavra no arquivo, calcula seu valor de hash e cria um novo nó de palavra associado a essa palavra. A frequência do nó de palavra é definida como -1 para diferenciar as stop words das palavras regulares. O novo nó de palavra é adicionado ao início da lista ligada na posição de hash correspondente na tabela de hash.
 
-- hashFunction(const char* str)
+3. hashFunction(const char* str)
 Essa função calcula um valor de hash para uma dada string str. Ela percorre os caracteres da string, multiplicando o valor atual do hash por um número primo (5381) e somando o valor ASCII do caractere atual. O valor final é reduzido usando a operação de módulo para que ele caiba dentro do intervalo da tabela de hash.
 Exemplo de Funcionamento da Função hashFunction com a Palavra "aba":
 
-Inicialização: hash = 5381 (número arbitrário que foi escolhido como semente inicial.).
+- Inicialização: hash = 5381 (número arbitrário que foi escolhido como semente inicial.).
 
-Percorrendo os caracteres:
-
+- Percorrendo os caracteres:
 Primeiro caractere 'a':
 Valor ASCII de 'a': 97
 Cálculo: hash = (hash * 33) + 97 = 177670
@@ -51,29 +50,28 @@ Cálculo: hash = (177670 * 33) + 98 = 5863208
 Caractere 'a' novamente:
 Valor ASCII de 'a': 97
 Cálculo: hash = (5841642 * 33) + 97 = 193485961
-Redução de Hash:
+- Redução de Hash:
 Aplicamos a operação de módulo para limitar o valor dentro do intervalo da tabela de hash (suponhamos TABLE_SIZE = 300000):
 hash = 193485961 % 300000 = 6449
 O valor de hash final para a palavra "aba" é 6449. Esse valor será usado para indexar na tabela de hash e determinar onde armazenar a palavra. Note que diferentes palavras terão diferentes valores de hash, mas a mesma palavra sempre terá o mesmo valor de hash, o que é fundamental para o funcionamento adequado da estrutura de dados.
 
-- createWordNode(const char* word)
+4. createWordNode(const char* word)
 Essa função cria um novo nó de palavra, associando a ele a palavra fornecida e definindo sua frequência inicial como 1. O nó de palavra é a estrutura que armazena a palavra e sua frequência na tabela de hash.
 
-- processFile(HashTable* hash_table, const char* input_file)
+5. processFile(HashTable* hash_table, const char* input_file)
 A função processFile é responsável por ler um arquivo de entrada, tokenizar o conteúdo em palavras, converter essas palavras para letras minúsculas e atualizar suas frequências na tabela de hash. Para cada palavra no arquivo, ela calcula seu valor de hash, busca ou cria um nó de palavra correspondente na tabela de hash e atualiza sua frequência.
 
-- createHeap(int capacity)
+6. createHeap(int capacity)
 Essa função cria e inicializa um heap min, que é usado para manter as palavras com as K maiores frequências. O heap é representado como uma estrutura Heap contendo um array de HeapNode e mantém as propriedades de um heap min.
 
-- heapify(Heap* heap, int index)
+7. heapify(Heap* heap, int index)
 A função heapify é um procedimento de manutenção do heap. Dado um índice index no heap, ela verifica se o elemento nesse índice obedece à propriedade de heap min. Se não obedecer, ela ajusta o heap trocando elementos para que a propriedade seja restaurada.
 
-- extractMinFromHeap(Heap* heap)
+8. extractMinFromHeap(Heap* heap)
 Essa função remove e retorna o nó de palavra com a menor frequência do heap. Para fazer isso, ela troca o nó raiz (com a menor frequência) com o último nó no heap, diminui o tamanho do heap e, em seguida, chama heapify para manter a propriedade de heap min.
 
-- insertIntoHeap(Heap* heap, Word* word_node)
+9. insertIntoHeap(Heap* heap, Word* word_node)
 A função insertIntoHeap insere um nó de palavra no heap. Ela verifica se há espaço no heap para a inserção, adiciona o nó de palavra ao final do heap e, em seguida, ajusta a posição do nó inserido para manter a propriedade de heap min.
-
 
 # Funcionamento
 
