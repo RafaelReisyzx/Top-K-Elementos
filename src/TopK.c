@@ -1,29 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
 #include "Topk.h"
-
-unsigned long hashFunction(const char* str) {
-    unsigned long hash = 5381;
-    int c;
-
-    while ((c = *str++)) {
-        hash = ((hash << 5) + hash) + c;
-    }
-
-    return hash % TABLE_SIZE;
-}
-
-Word* createWordNode(const char* word) {
-    Word* new_word = (Word*)malloc(sizeof(Word));
-    if (new_word != NULL) {
-        strcpy(new_word->word, word);
-        new_word->frequency = 1;
-        new_word->next = NULL;
-    }
-    return new_word;
-}
 
 void initializeHashTable(HashTable* hash_table) {
     for (int i = 0; i < TABLE_SIZE; i++) {
@@ -51,6 +26,27 @@ void loadStopWords(HashTable* hash_table, const char* stop_words_file) {
     fclose(file);
 }
 
+unsigned long hashFunction(const char* str) {
+    unsigned long hash = 5381;
+    int c;
+
+    while ((c = *str++)) {
+        hash = ((hash << 5) + hash) + c;
+    }
+
+    return hash % TABLE_SIZE;
+}
+
+Word* createWordNode(const char* word) {
+    Word* new_word = (Word*)malloc(sizeof(Word));
+    if (new_word != NULL) {
+        strcpy(new_word->word, word);
+        new_word->frequency = 1;
+        new_word->next = NULL;
+    }
+    return new_word;
+}
+
 void processFile(HashTable* hash_table, const char* input_file) {
     FILE* file = fopen(input_file, "r");
     if (file == NULL) {
@@ -60,34 +56,34 @@ void processFile(HashTable* hash_table, const char* input_file) {
 
     char word[MAX_WORD_LENGTH];
     while (fscanf(file, "%s", word) != EOF) {
-        word[strcspn(word, ".,!?")] = '\0'; 
+        word[strcspn(word, ".,!?;-—/\()")] = '\0'; 
         for (int i = 0; word[i]; i++) {
             word[i] = tolower(word[i]); 
         }
 
         if (strlen(word) > 0) {
             unsigned long hash = hashFunction(word);
-            Word* current = hash_table->table[hash];
-            Word* prev = NULL;
+            Word* palavra_atual = hash_table->table[hash];
+            Word* palavra_anterior = NULL;
 
-            while (current != NULL) {
-                if (strcmp(current->word, word) == 0) {
-                    if (current->frequency > 0) {
-                        current->frequency++;
+            while (palavra_atual != NULL) {
+                if (strcmp(palavra_atual->word, word) == 0) {
+                    if (palavra_atual->frequency > 0) {
+                        palavra_atual->frequency++;
                     }
                     break;
                 }
-                prev = current;
-                current = current->next;
+                palavra_anterior = palavra_atual;
+                palavra_atual = palavra_atual->next;
             }
 
-            if (current == NULL) {
+            if (palavra_atual == NULL) {
                 Word* new_word = createWordNode(word);
                 if (new_word != NULL) {
-                    if (prev == NULL) {
+                    if (palavra_anterior == NULL) {
                         hash_table->table[hash] = new_word;
                     } else {
-                        prev->next = new_word;
+                        palavra_anterior->next = new_word;
                     }
                 }
             }
@@ -95,30 +91,6 @@ void processFile(HashTable* hash_table, const char* input_file) {
     }
 
     fclose(file);
-}
-
-void printHashTable(const HashTable* hash_table) {
-    printf("Palavras adicionadas na tabela:\n");
-    for (int i = 0; i < TABLE_SIZE; i++) {
-        Word* current = hash_table->table[i];
-        while (current != NULL) {
-            if (current->frequency > 0) {
-                printf("%s: %d\n", current->word, current->frequency);
-            }
-            current = current->next;
-        }
-    }
-}
-
-void freeHashTable(HashTable* hash_table) {
-    for (int i = 0; i < TABLE_SIZE; i++) {
-        Word* current = hash_table->table[i];
-        while (current != NULL) {
-            Word* temp = current;
-            current = current->next;
-            free(temp);
-        }
-    }
 }
 Heap* createHeap(int capacity) {
     Heap* heap = (Heap*)malloc(sizeof(Heap));
@@ -128,21 +100,6 @@ Heap* createHeap(int capacity) {
         heap->array = (HeapNode*)malloc(capacity * sizeof(HeapNode));
     }
     return heap;
-}
-
-void insertIntoHeap(Heap* heap, Word* word_node) {
-    if (heap->size < heap->capacity) {
-        HeapNode newNode;
-        newNode.word_node = word_node;
-        heap->array[heap->size] = newNode;
-        int index = heap->size;
-        heap->size++;
-        while (index != 0 && heap->array[(index - 1) / 2].word_node->frequency > word_node->frequency) {
-            heap->array[index] = heap->array[(index - 1) / 2];
-            index = (index - 1) / 2;
-        }
-        heap->array[index].word_node = word_node;
-    }
 }
 
 void heapify(Heap* heap, int index) {
@@ -165,7 +122,6 @@ void heapify(Heap* heap, int index) {
         heapify(heap, smallest);
     }
 }
-
 Word* extractMinFromHeap(Heap* heap) {
     if (heap->size == 0) {
         return NULL;
@@ -179,7 +135,18 @@ Word* extractMinFromHeap(Heap* heap) {
     return min_word;
 }
 
-void freeHeap(Heap* heap) {
-    free(heap->array);
-    free(heap);
+void insertIntoHeap(Heap* heap, Word* word_node) {
+    if (heap->size < heap->capacity) {
+        HeapNode newNode;
+        newNode.word_node = word_node;
+        heap->array[heap->size] = newNode;
+        int index = heap->size;
+        heap->size++;
+        while (index != 0 && heap->array[(index - 1) / 2].word_node->frequency > word_node->frequency) {
+            heap->array[index] = heap->array[(index - 1) / 2];
+            index = (index - 1) / 2;
+        }
+        heap->array[index].word_node = word_node;
+    }
 }
+
