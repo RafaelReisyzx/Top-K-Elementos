@@ -33,9 +33,10 @@ int main() {
         }
     }
     printf("Top %d palavras mais frequentes:\n", k);
+   printf("Palavras Frequência\n", k);
     while (heap->size > 0) {
         Word* max_word = extractMinFromHeap(heap);
-        printf("%s: %d\n", max_word->word, max_word->frequency);
+        printf("%s %d\n", max_word->word, max_word->frequency);
     }
 
 
