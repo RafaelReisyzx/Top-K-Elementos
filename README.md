@@ -9,9 +9,9 @@ chamado top k itens. Neste problema, é preciso encontrar os k itens mais valios
 coleção de dados. Logo, utiliza-se o hash para contar a frequência de todos os itens, enquanto
 o heap se aplica na manutenção de uma lista dos k itens de maior valor. Sabendo-se disso,
 elabore uma solução em C/C++ que dado uma entrada:
-• Crie uma tabela de dispersão (hash) para contar a frequência de cada elemento tokenizado
+- • Crie uma tabela de dispersão (hash) para contar a frequência de cada elemento tokenizado
 da coleção de dados de entrada.
-• Crie uma árvore de prioridades (heap) de tamanho k e insira os primeiros k elementos do
+- • Crie uma árvore de prioridades (heap) de tamanho k e insira os primeiros k elementos do
 hash nela.
 1. Para cada elemento restante na hash, compare a contagem com o menor valor do
 heap.
@@ -24,6 +24,31 @@ Esse algoritmo é uma combinação eficiente do uso de hash para contar a frequ�
 elementos e heap para manter a lista dos k elementos com maiores valores. Sua complexidade,
 caso implementado adequadamente, é de O(nlogk), onde n é o tamanho da coleção de dados
 e k o número de itens mais relevantes.
+
+#Arquivos
+
+##CódigoFonte
+
+- main.c
+Este arquivo contém a função principal que demonstra o uso do algoritmo. Ele realiza as seguintes etapas:
+
+Inicializa uma tabela de dispersão.
+Carrega palavras de parada de um arquivo na tabela de dispersão.
+Processa um arquivo de entrada dado para popular a tabela de dispersão.
+Cria um heap e insere elementos da tabela de dispersão nele.
+Atualiza o heap para manter os k elementos principais.
+Imprime os k elementos principais com suas frequências.
+- Topk.h
+Este arquivo de cabeçalho define as estruturas e protótipos de função usados no algoritmo:
+Word: Uma estrutura que representa uma palavra com sua frequência e um ponteiro para a próxima palavra.
+HashTable: Uma estrutura que representa uma tabela de dispersão de palavras.
+HeapNode: Uma estrutura que representa um nó de heap contendo um ponteiro para uma palavra.
+Heap: Uma estrutura que representa um heap de nós de heap.
+Ele também declara as funções
+- Topk.c
+Este arquivo de origem contém as implementações das funções declaradas em Topk.h. Ele inclui funções para inicializar tabelas de dispersão, carregar palavras de parada, processar arquivos, criar heaps e realizar operações de heap.
+##Entrada
+Os arquivos de entrada podem ser encontrados na pasta 
 
 # Funções 
 
