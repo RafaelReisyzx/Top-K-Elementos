@@ -288,7 +288,7 @@ Este arquivo de origem contém as implementações das funções declaradas em T
 
 ## Entrada
 
-Os arquivos de entrada podem ser encontrados na pasta dataset,as Stop Words são colocadas no arquivo stopwords.txt e abaixo podemos ver dois exemplos de entrada:Semana_Machado_Assis.txt e DomCasmurro.txt que podem ser alterados dentro do main.c:
+Os arquivos de entrada estão localizados na pasta "dataset". As palavras irrelevantes (Stop Words) são armazenadas no arquivo "stopwords.txt". Abaixo, você pode encontrar dois exemplos de arquivos de entrada: "Semana_Machado_Assis.txt" e "DomCasmurro.txt". Esses nomes podem ser modificados no arquivo "main.c":
 
 ![This is an image](https://github.com/RafaelReisyzx/Top-K-Elementos/blob/main/imgs/dataset.png)
 
